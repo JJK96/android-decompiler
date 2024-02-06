@@ -13,7 +13,7 @@ dir="$(dirname -- "$(readlink -f -- "$BASH_SOURCE")")"
 echo "Extracting $input"
 unzip -qq -o "$input" -d "$output"
 echo "Apktool $input"
-apktool d "$input" -o "$output" -f -s
+java -jar "$dir/deps/apktool.jar" d "$input" -o "$output" -f -s
 cd "$output"
 echo "Converting .dex to .jar"
 ls *.dex | while read x; do

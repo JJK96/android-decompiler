@@ -20,6 +20,8 @@ android-decompiler <input.apk> <output_dir>
 
 * [fernflower](https://github.com/fesh0r/fernflower)
 * [dex2jar](https://github.com/pxb1988/dex2jar)
+* [apktool](https://apktool.org)
 * Java
 
-I included releases of fernflower and dex2jar in this repository, but you can replace them with your own if you don't trust me.
+I included releases of fernflower, apktool and dex2jar in this repository, but you can replace them with your own if you don't trust me.
+Fernflower was compiled with OpenJDK 20, if you use a different java version, your mileage may vary.
