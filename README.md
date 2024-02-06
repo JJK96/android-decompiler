@@ -4,6 +4,8 @@ Same idea as [Android Project Creator](https://github.com/ThisIsLibra/AndroidPro
 I created this because I wanted to automate the decompilation process, instead of manually performing the steps.
 Android Project Creator took too much time to run for my needs, while with my own steps I got sufficient results in a much shorter runtime.
 
+During decompiling, decompilation of certain common libraries (such as android, androidx, junit, etc.) are excluded.
+
 ## Install
 
 ```

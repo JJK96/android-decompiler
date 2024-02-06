@@ -7,6 +7,7 @@ fi
 
 input=$1
 output=$2
+excludes="android|com/google|kotlin|okhttp3|org/junit|junit|org/jetbrains|org/intellij"
 
 dir="$(dirname -- "$(readlink -f -- "$BASH_SOURCE")")"
 
@@ -31,7 +32,7 @@ function decompile() {
     mkdir -p decompiled
     classes=$(cd classes; find . -type d -depth 2 | \
         sed -e 's#^./##g' | \
-        grep -vE "^(android|com/google|kotlin|okhttp3|org/junit|junit|org/jetbrains|org/intellij)")
+        grep -vE "^($excludes)")
     for class_dir in $classes; do
         class_output="decompiled/${class_dir}"
         echo "Decompiling $class_dir to $class_output"
