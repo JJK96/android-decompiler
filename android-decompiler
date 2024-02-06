@@ -35,7 +35,7 @@ function decompile() {
         grep -vE "^($excludes)")
     for class_dir in $classes; do
         class_output="decompiled/${class_dir}"
-        echo "Decompiling $class_dir to $class_output"
+        echo "Decompiling $class_dir"
         mkdir -p "$class_output"
         java -jar "$dir/deps/fernflower.jar" "classes/${class_dir}" "$class_output"
     done
