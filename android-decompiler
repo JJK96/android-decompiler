@@ -10,22 +10,43 @@ output=$2
 
 dir="$(dirname -- "$(readlink -f -- "$BASH_SOURCE")")"
 
-echo "Extracting $input"
-unzip -qq -o "$input" -d "$output"
-echo "Apktool $input"
-java -jar "$dir/deps/apktool.jar" d "$input" -o "$output" -f -s
-cd "$output"
-echo "Converting .dex to .jar"
-ls *.dex | while read x; do
-    "$dir/deps/dex-tools/d2j-dex2jar.sh" "$x"
-    rm "$x"
-done
-echo "Extracting .jar files"
-ls *.jar | while read x; do
-    unzip "$x" -d classes
-    rm "$x"
-done
+function convert_dex() {
+    echo "Converting .dex to .jar"
+    ls *.dex | while read x; do
+        "$dir/deps/dex-tools/d2j-dex2jar.sh" "$x"
+        rm "$x"
+    done
+}
 
-echo "Decompiling..."
-mkdir decompiled
-java -jar "$dir/deps/fernflower.jar" classes decompiled
+function extract_jars() {
+    echo "Extracting .jar files"
+    ls *.jar | while read x; do
+        unzip -qq -o "$x" -d classes
+        rm "$x"
+    done
+}
+
+function decompile() {
+    echo "Decompiling..."
+    mkdir -p decompiled
+    classes=$(cd classes; find . -type d -depth 2 | \
+        sed -e 's#^./##g' | \
+        grep -vE "^(android|com/google|kotlin|okhttp3|org/junit|junit|org/jetbrains|org/intellij)")
+    for class_dir in $classes; do
+        class_output="decompiled/${class_dir}"
+        echo "Decompiling $class_dir to $class_output"
+        mkdir -p "$class_output"
+        java -jar "$dir/deps/fernflower.jar" "classes/${class_dir}" "$class_output"
+    done
+}
+
+function apktool() {
+    echo "Apktool $input"
+    java -jar "$dir/deps/apktool.jar" d "$input" -o "$output" -f -s
+}
+
+apktool
+cd "$output"
+convert_dex
+extract_jars
+decompile
