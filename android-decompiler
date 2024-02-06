@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+
+if [ $# -lt 2 ]; then
+    echo "Usage: $0 <input.apk> <output_dir>"
+    exit
+fi
+
+input=$1
+output=$2
+
+dir="$(dirname -- "$(readlink -f -- "$BASH_SOURCE")")"
+
+echo "Extracting $input"
+unzip -qq -o "$input" -d "$output"
+echo "Apktool $input"
+apktool d "$input" -o "$output" -f -s
+cd "$output"
+echo "Converting .dex to .jar"
+ls *.dex | while read x; do
+    "$dir/deps/dex-tools/d2j-dex2jar.sh" "$x"
+    rm "$x"
+done
+echo "Extracting .jar files"
+ls *.jar | while read x; do
+    unzip "$x" -d classes
+    rm "$x"
+done
+
+echo "Decompiling..."
+mkdir decompiled
+java -jar "$dir/deps/fernflower.jar" classes decompiled

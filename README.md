@@ -1,0 +1,25 @@
+# Android decompiler
+
+Same idea as [Android Project Creator](https://github.com/ThisIsLibra/AndroidProjectCreator) by Max Kersten, but written in bash.
+I created this because I wanted to automate the decompilation process, instead of manually performing the steps.
+Android Project Creator took too much time to run for my needs, while with my own steps I got sufficient results in a much shorter runtime.
+
+## Install
+
+```
+ln -s $(pwd)/android-decompiler <somewhere_in_your_path>
+```
+
+## Usage
+
+```
+android-decompiler <input.apk> <output_dir>
+```
+
+## Dependencies
+
+* [fernflower](https://github.com/fesh0r/fernflower)
+* [dex2jar](https://github.com/pxb1988/dex2jar)
+* Java
+
+I included releases of fernflower and dex2jar in this repository, but you can replace them with your own if you don't trust me.
