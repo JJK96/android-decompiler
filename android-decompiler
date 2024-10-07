@@ -5,8 +5,14 @@ if [ $# -lt 2 ]; then
     exit
 fi
 
+
 input=$1
 output=$2
+if [ -d "$output" ]; then
+    echo "Output directory already exists, please choose a non-existing directory, it will be created by the tool."
+    exit 1
+fi
+
 excludes="android|com/google|kotlin|okhttp3|org/junit|junit|org/jetbrains|org/intellij"
 
 dir="$(dirname -- "$(readlink -f -- "$BASH_SOURCE")")"
