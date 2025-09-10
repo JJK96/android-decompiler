@@ -8,6 +8,13 @@ During decompiling, decompilation of certain common libraries (such as android, 
 
 ## Install
 
+Install dependencies:
+```
+make dependencies
+```
+
+Symlink the binary to your PATH:
+
 ```
 ln -s $(pwd)/android-decompiler <somewhere_in_your_path>
 ```
@@ -20,10 +27,6 @@ android-decompiler <input.apk> <output_dir>
 
 ## Dependencies
 
-* [fernflower](https://github.com/fesh0r/fernflower)
-* [dex2jar](https://github.com/pxb1988/dex2jar)
+* [jadx](https://github.com/skylot/jadx)
 * [apktool](https://apktool.org)
 * Java
-
-I included releases of fernflower, apktool and dex2jar in this repository, but you can replace them with your own if you don't trust me.
-Fernflower was compiled with OpenJDK 20, if you use a different java version, your mileage may vary.

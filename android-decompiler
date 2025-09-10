@@ -13,38 +13,11 @@ if [ -d "$output" ]; then
     exit 1
 fi
 
-excludes="android|com/google|kotlin|okhttp3|org/junit|junit|org/jetbrains|org/intellij|org/apache/cordova"
-
 dir="$(dirname -- "$(readlink -f -- "$BASH_SOURCE")")"
-
-function convert_dex() {
-    echo "Converting .dex to .jar"
-    ls *.dex | while read x; do
-        "$dir/deps/dex-tools/d2j-dex2jar.sh" "$x"
-        rm "$x"
-    done
-}
-
-function extract_jars() {
-    echo "Extracting .jar files"
-    ls *.jar | while read x; do
-        unzip -qq -o "$x" -d classes
-        rm "$x"
-    done
-}
 
 function decompile() {
     echo "Decompiling..."
-    mkdir -p decompiled
-    classes=$(cd classes; find . -type d -depth 2 | \
-        sed -e 's#^./##g' | \
-        grep -vE "^($excludes)")
-    for class_dir in $classes; do
-        class_output="decompiled/${class_dir}"
-        echo "Decompiling $class_dir"
-        mkdir -p "$class_output"
-        java -jar "$dir/deps/fernflower.jar" "classes/${class_dir}" "$class_output"
-    done
+    java -jar "$dir/deps/jadx.jar" -d decompiled *.dex
 }
 
 function apktool() {
@@ -54,6 +27,4 @@ function apktool() {
 
 apktool
 cd "$output"
-convert_dex
-extract_jars
 decompile
